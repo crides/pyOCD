@@ -747,6 +747,7 @@ class DAPAccessCMSISDAP(DAPAccessIntf):
         if self._is_open:
             return
 
+        LOG.debug("dap open: interface: %s", self._interface)
         self._interface.open()
 
         # If this probe has already been opened and examined previously, we don't need to examine it again.

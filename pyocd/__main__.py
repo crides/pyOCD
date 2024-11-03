@@ -90,6 +90,7 @@ class PyOCDTool(SubcommandBase):
         parser.add_argument('-V', '--version', action='version', version=__version__)
         parser.add_argument('--help-options', action='store_true',
             help="Display available session options.")
+        parser.add_argument('--termux-usb-fd', type=int)
 
         self.add_subcommands(parser)
 

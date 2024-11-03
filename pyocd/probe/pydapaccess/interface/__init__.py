@@ -18,11 +18,13 @@
 import os
 import logging
 import platform
+
 from ..dap_access_api import DAPAccessIntf
 from .hidapi_backend import HidApiUSB
 from .pyusb_backend import PyUSB
 from .pyusb_v2_backend import PyUSBv2
 from .pywinusb_backend import PyWinUSB
+from .termux_usb_backend import TermuxUSB
 
 LOG = logging.getLogger(__name__)
 
@@ -31,6 +33,7 @@ INTERFACE = {
              'pyusb': PyUSB,
              'pyusb_v2': PyUSBv2,
              'pywinusb': PyWinUSB,
+             'termux-usb': TermuxUSB,
             }
 
 # Allow user to override backend with an environment variable.
@@ -44,7 +47,9 @@ if USB_BACKEND and ((USB_BACKEND not in INTERFACE) or (not INTERFACE[USB_BACKEND
 # Select backend based on OS and availability.
 system = platform.system()
 if not USB_BACKEND:
-    if system == "Windows":
+    if os.getenv("TERMUX_VERSION") is not None:
+        USB_BACKEND = "termux-usb"
+    elif system == "Windows":
         # Prefer hidapi over pyWinUSB for Windows, since pyWinUSB has known bug(s)
         if HidApiUSB.isAvailable:
             USB_BACKEND = "hidapiusb"

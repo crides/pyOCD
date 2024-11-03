@@ -18,6 +18,9 @@
 from ..core import exceptions
 from ..core.plugin import load_plugin_classes_of_type
 from .debug_probe import DebugProbe
+import logging
+
+LOG = logging.getLogger(__name__)
 
 ## @brief Dictionary of loaded probe plugins indexed by name.
 PROBE_CLASSES = {}
@@ -48,6 +51,7 @@ class DebugProbeAggregator(object):
     @staticmethod
     def get_all_connected_probes(unique_id=None):
         klasses, unique_id, is_explicit = DebugProbeAggregator._get_probe_classes(unique_id)
+        LOG.debug("all cls: %s", klasses)
 
         probes = []
 
@@ -60,7 +64,10 @@ class DebugProbeAggregator(object):
 
         # No full match, so ask probe classes for probes.
         for cls in klasses:
-            probes += cls.get_all_connected_probes(unique_id, is_explicit)
+            LOG.debug("cls: %s", cls)
+            new_probes = cls.get_all_connected_probes(unique_id, is_explicit)
+            LOG.debug("new probes: %s", new_probes)
+            probes += new_probes
 
         # Filter by unique ID.
         if unique_id is not None:

@@ -546,6 +546,7 @@ class Session(Notifier):
             # Add in the full set of objects for the user script.
             self._update_user_script_namespace()
 
+            LOG.debug("open session: _probe: %s", self._probe)
             self._probe.open()
             self._closed = False
             self._probe.set_clock(self.options.get('frequency'))

@@ -155,6 +155,7 @@ class CMSISDAPProbe(DebugProbe):
 
     def __init__(self, device: DAPAccess) -> None:
         super().__init__()
+        LOG.debug("probe init: device: %s", device)
         self._link = device
         self._supported_protocols: List[DebugProbe.Protocol] = []
         self._protocol: Optional[DebugProbe.Protocol] = None
@@ -274,6 +275,7 @@ class CMSISDAPProbe(DebugProbe):
         try:
             TRACE.debug("trace: open")
 
+            LOG.debug("open session: probe link: %s", self._link)
             self._link.open()
             self._is_open = True
             self._link.set_deferred_transfer(self.session.options.get('cmsis_dap.deferred_transfers'))
